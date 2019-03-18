@@ -11,6 +11,11 @@ pipeline {
     stages {
         stage('Publishing new images') {
             steps {
+                sh '''
+                    REGISTRY=$IMG_REGISTRY
+
+                    echo "REGISTRY=${REGISTRY}"
+                '''
                 script {
                     def IMAGE_NAMES_LIST = sh (
                     script: '''
