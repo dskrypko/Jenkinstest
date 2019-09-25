@@ -26,8 +26,7 @@ pipeline {
                             echo "jenkinstest"
                         ''',
                         returnStdout: true
-                        ).trim().split(" ")
-                    echo IMAGE_NAMES_LIST
+                        ).trim()
                 }
             }
         }
@@ -39,8 +38,7 @@ pipeline {
                             echo "v2.0.0"
                         ''',
                         returnStdout: true
-                    ).trim().split(" ")
-                    echo IMAGE_VERSION
+                    ).trim()
                 }
             }
         }
