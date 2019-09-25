@@ -9,33 +9,49 @@ pipeline {
     }
 
     stages {
-        stage('Publishing new images') {
+        stage("Lint") {
             steps {
                 sh '''
                     REGISTRY=$IMG_REGISTRY
 
                     echo "REGISTRY=${REGISTRY}"
                 '''
+            }
+        }
+        stage("Test") {
+            steps {
                 script {
                     def IMAGE_NAMES_LIST = sh (
-                    script: '''
-                        echo "onprem.agent"
-                    ''',
-                    returnStdout: true
-                    ).trim().split(" ")
-
+                        script: '''
+                            echo "jenkinstest"
+                        ''',
+                        returnStdout: true
+                        ).trim()
+                }
+            }
+        }
+        stage("Build") {
+            steps {
+                script {
                     def IMAGE_VERSION = sh (
                         script: '''
                             echo "v2.0.0"
                         ''',
                         returnStdout: true
-                    ).trim().split(" ")
-
-                    imgLen = IMAGE_NAMES_LIST.length;
-                    for (i = 0; i < imgLen; i++) {
-                        def TMP_IMG="${env.IMG_REGISTRY}/${IMAGE_NAMES_LIST[i]}"
-                        echo TMP_IMG
-                    }
+                    ).trim()
+                }
+            }
+        }
+        stage("Push") {
+            when {
+                anyOf {
+                    branch "master"
+                    buildingTag()
+                }
+            }
+            steps {
+                script {
+                    echo "${env.IMG_REGISTRY}"
                 }
             }
         }
