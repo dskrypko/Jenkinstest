@@ -20,24 +20,28 @@ pipeline {
         }
         stage("Test") {
             steps {
-                def IMAGE_NAMES_LIST = sh (
-                    script: '''
-                        echo "jenkinstest"
-                    ''',
-                    returnStdout: true
-                    ).trim().split(" ")
-                echo IMAGE_NAMES_LIST
+                script {
+                    def IMAGE_NAMES_LIST = sh (
+                        script: '''
+                            echo "jenkinstest"
+                        ''',
+                        returnStdout: true
+                        ).trim().split(" ")
+                    echo IMAGE_NAMES_LIST
+                }
             }
         }
         stage("Build") {
             steps {
-                def IMAGE_VERSION = sh (
+                script {
+                    def IMAGE_VERSION = sh (
                         script: '''
                             echo "v2.0.0"
                         ''',
                         returnStdout: true
                     ).trim().split(" ")
-                echo IMAGE_VERSION
+                    echo IMAGE_VERSION
+                }
             }
         }
         stage("Push") {
@@ -48,7 +52,9 @@ pipeline {
                 }
             }
             steps {
-                echo "${env.IMG_REGISTRY}"
+                script {
+                    echo "${env.IMG_REGISTRY}"
+                }
             }
         }
     }
